@@ -13,31 +13,12 @@
     <div class="nav-wrapper">
       <a href="/" class="brand-logo">Tutorials</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="/">Home</a></li>
-        <li><a href="/author">Author</a></li>
-          {% if request.user.is_authenticated %}
-            <li><a href="/logout">Logout</a></li>
-          {% else %}
-            <li><a href="/login">Login</a></li>
-          {% endif %}
-        <li><a href="/register">Register</a></li>
+        {% include 'main/includes/navbaritems.html' %}
       </ul>
     </div>
   </nav>
 
-{% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'success'%}
-                <script>M.toast({html: "{{message}}", classes: 'green rounded', displayLength:2000});</script>
-            {% elif message.tags == 'info'%}
-                <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:2000});</script>
-            {% elif message.tags == 'warning'%}
-                <script>M.toast({html: "{{message}}", classes: 'orange rounded', displayLength:10000});</script>
-            {% elif message.tags == 'error'%}
-                <script>M.toast({html: "{{message}}", classes: 'red rounded', displayLength:10000});</script>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+{% include 'main/includes/messaging.html' %}
 
 <div class="container">
   {% block content %}

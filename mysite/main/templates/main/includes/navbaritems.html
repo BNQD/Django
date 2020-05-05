@@ -1,0 +1,10 @@
+<li><a href="/">Home</a></li>
+        <li><a href="/author">Author</a></li>
+          {% if request.user.is_authenticated %}
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/manage_account">Manage Account</a></li>
+            <li>Logged in as <strong>{{user.get_username}}</strong></li>
+          {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+          {% endif %}
