@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from main.models import TutorialCategory
+from main.models import TutorialCategory, TutorialSeries
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -26,7 +26,9 @@ class NewCategoryForm(forms.ModelForm):
         model = TutorialCategory
         fields = ("tutorial_category", "category_summary", "category_slug")
 
-
-
+class NewSeriesForm(forms.ModelForm):
+    class Meta:
+        model = TutorialSeries
+        fields = ("tutorial_series", "series_summary", "tutorial_category")
 
 

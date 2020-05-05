@@ -4,7 +4,7 @@ from .models import Tutorial, TutorialSeries, TutorialCategory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib import messages
-from .forms import NewUserForm, NewCategoryForm
+from .forms import NewUserForm, NewCategoryForm, NewSeriesForm
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -100,6 +100,23 @@ def new_category(request):
     else:
         form = NewCategoryForm()
     return render(request, "main/new_category.html", {"form": form})
+
+def new_series(request):
+    if request.method == 'POST':
+        form = NewSeriesForm(request.POST)
+        if form.is_valid():
+            series = form.save(commit=False)
+            series.user = request.user
+            series.save()
+
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('main:homepage')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = NewSeriesForm()
+    return render(request, "main/new_series.html", {"form": form})
+
 
 
 def single_slug(request, single_slug):
