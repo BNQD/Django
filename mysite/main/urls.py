@@ -28,7 +28,14 @@ urlpatterns = [
 
     path('accounts/', include('django.contrib.auth.urls')),
 
+    path("new_category/", views.new_category, name="new_category"),
+
     path("manage_account/", views.manage_account, name="manage_account"),
     path("change_password/", views.change_password, name="change_password"),
+
+
+
+    path("<single_slug>", views.single_slug, name="single_slug"),
+
 
 ]
