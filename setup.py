@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='mysite_setup',
+    name='mysite',
     version='',
     packages=['main', 'main.migrations', 'mysite'],
     url='',
