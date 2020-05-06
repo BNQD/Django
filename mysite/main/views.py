@@ -6,6 +6,7 @@ from django.contrib.auth import logout, authenticate, login, update_session_auth
 from django.contrib import messages
 from .forms import NewUserForm, NewCategoryForm, NewSeriesForm
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 # Create your views here.
 def homepage(request):
@@ -93,7 +94,7 @@ def new_category(request):
             category.user = request.user
             category.save()
 
-            messages.success(request, 'Your password was successfully updated!')
+            messages.success(request, 'New category created!')
             return redirect('main:homepage')
         else:
             messages.error(request, 'Please correct the error below.')
@@ -109,7 +110,7 @@ def new_series(request):
             series.user = request.user
             series.save()
 
-            messages.success(request, 'Your password was successfully updated!')
+            messages.success(request, 'New series created! ')
             return redirect('main:homepage')
         else:
             messages.error(request, 'Please correct the error below.')
@@ -127,9 +128,11 @@ def single_slug(request, single_slug):
         series_urls = {}
 
         for m in matching_series.all():
-            part_one = Tutorial.objects.filter(tutorial_series__tutorial_series=m.tutorial_series).earliest("tutorial_published")
-            series_urls[m] = part_one.tutorial_slug
-
+            try:
+                part_one = Tutorial.objects.filter(tutorial_series__tutorial_series=m.tutorial_series).earliest("tutorial_published")
+                series_urls[m] = part_one.tutorial_slug
+            except:
+                series_urls[m] = m.tutorial_series
         return render(request=request,
                       template_name='main/category.html',
                       context={"tutorial_series": matching_series, "part_ones": series_urls})
