@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Tutorial, TutorialSeries, TutorialCategory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
@@ -20,13 +20,13 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f"New account created: {username}")
+            messages.success(request, "New account created: {username}")
             login(request, user)
             return redirect("main:homepage")
 
         else:
             for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+                messages.error(request, "{msg}: {form.error_messages[msg]}")
 
             return render(request = request,
                           template_name = "main/register.html",
@@ -46,7 +46,7 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}")
+                messages.info(request, "You are now logged in as {username}")
                 return redirect('/')
             else:
                 messages.error(request, "Invalid username or password.")
@@ -95,7 +95,7 @@ def new_category(request):
             category.save()
 
             messages.success(request, 'New category created!')
-            return redirect('main:homepage')
+            return redirect(request.GET.get('prev'))
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -106,12 +106,13 @@ def new_series(request):
     if request.method == 'POST':
         form = NewSeriesForm(request.POST)
         if form.is_valid():
+            next = request.POST.get('next', '/')
             series = form.save(commit=False)
             series.user = request.user
             series.save()
 
             messages.success(request, 'New series created! ')
-            return redirect('main:homepage')
+            return redirect(request.GET.get('prev'))
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -136,7 +137,7 @@ def single_slug(request, single_slug):
             except:
                 series_urls[m] = m.tutorial_series
         return render(request=request,
-                      template_name='main/category.html',
+                      template_name='main/series.html',
                       context={"tutorial_series": matching_series, "part_ones": series_urls})
 
 

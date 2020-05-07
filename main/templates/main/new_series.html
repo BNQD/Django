@@ -5,6 +5,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ request.path }}">
         <br>
         <button class="btn waves-effect waves-light" type="submit" name="action"> Done </button>
     </form>
