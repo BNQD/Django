@@ -27,6 +27,7 @@ class NewCategoryForm(forms.ModelForm):
         fields = ("tutorial_category", "category_summary", "category_slug")
 
 class NewSeriesForm(forms.ModelForm):
+    tutorial_category = forms.ModelChoiceField(label="Category Reference", required=False, queryset = TutorialCategory.objects.all())
     class Meta:
         model = TutorialSeries
         fields = ("tutorial_series", "series_summary", "tutorial_category")

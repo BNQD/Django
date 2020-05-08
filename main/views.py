@@ -109,9 +109,8 @@ def new_series(request):
     if request.method == 'POST':
         form = NewSeriesForm(request.POST)
         if form.is_valid():
-            next = request.POST.get('next', '/')
             series = form.save(commit=False)
-            series.user = request.user
+            series.tutorial_category = TutorialCategory.objects.filter(category_slug=request.GET.get('prev').strip('/')).first()
             series.save()
 
             messages.success(request, 'New series created! ')
@@ -120,6 +119,7 @@ def new_series(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = NewSeriesForm()
+        form.fields['tutorial_category'].widget = forms.HiddenInput()
     return render(request, "main/new_series.html", {"form": form})
 
 
