@@ -37,5 +37,5 @@
 {% endblock %}
 
 {% block sidebar %}
-<a href = "new_category/" class="waves-effect waves-light btn-large">New</a>
+    <a href = "{% url 'main:new_tutorial' %}?prev={{request.path}}" class="waves-effect waves-light btn-small">New Tutorial</a>
 {% endblock %}

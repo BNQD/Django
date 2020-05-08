@@ -21,6 +21,5 @@
 {% endblock %}
 
 {% block sidebar %}
-
-    <a href = "{% url 'main:new_series' %}?prev={{request.path}}" class="waves-effect waves-light btn-large">New Series</a>
+    <a href = "{% url 'main:new_series' %}?prev={{request.path}}" class="waves-effect waves-light btn-small">New Series</a>
 {% endblock %}

@@ -30,6 +30,7 @@ urlpatterns = [
 
     path("new_category/", views.new_category, name="new_category"),
     path("new_series/", views.new_series, name="new_series"),
+    path("new_tutorial/", views.new_tutorial, name="new_tutorial"),
 
     path("manage_account/", views.manage_account, name="manage_account"),
     path("change_password/", views.change_password, name="change_password"),

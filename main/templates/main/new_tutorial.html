@@ -1,0 +1,19 @@
+<script src="{% static 'myapp/js/tinymce/tinymce.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'myapp/js/tinymce/custom.js' %}" ></script>
+
+{%extends 'main/header.html' %}
+
+{% block content %}
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ form.media }}
+        <script type="text/javascript" src="{% url "tinymce-js" "tinymce" %}"></script>
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <br>
+        <button class="btn waves-effect waves-light" type="submit" name="action"> Done </button>
+    </form>
+
+{% endblock %}
+

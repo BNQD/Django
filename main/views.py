@@ -5,10 +5,11 @@ from .models import Tutorial, TutorialSeries, TutorialCategory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib import messages
-from .forms import NewUserForm, NewCategoryForm, NewSeriesForm
+from .forms import *
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+import datetime
 # Create your views here.
 def homepage(request):
     return render(request=request,
@@ -93,7 +94,7 @@ def new_category(request):
         if form.is_valid():
             category = form.save(commit=False)
             category.user = request.user
-            category.category_slug = form.cleaned_data['tutorial_category']
+            category.category_slug = form.cleaned_data.get('tutorial_category')
             category.save()
 
             messages.success(request, 'New category created!')
@@ -110,7 +111,7 @@ def new_series(request):
         form = NewSeriesForm(request.POST)
         if form.is_valid():
             series = form.save(commit=False)
-            series.tutorial_category = TutorialCategory.objects.filter(category_slug=request.GET.get('prev').strip('/')).first()
+            series.tutorial_category = TutorialCategory.objects.filter(tutorial_category=request.GET.get('prev').strip('/')).first()
             series.save()
 
             messages.success(request, 'New series created! ')
@@ -120,6 +121,27 @@ def new_series(request):
     else:
         form = NewSeriesForm()
         form.fields['tutorial_category'].widget = forms.HiddenInput()
+    return render(request, "main/new_series.html", {"form": form})
+
+def new_tutorial(request):
+    if request.method == 'POST':
+        form = NewTutorialForm(request.POST)
+        if form.is_valid():
+            tutorial = form.save(commit=False)
+            tutorial.tutorial_slug = form.cleaned_data.get('tutorial_title')
+            tutorial.tutorial_series = TutorialCategory.objects.filter(tutorial_series=request.GET.get('prev').strip('/')).first()
+            tutorial.tutorial_published = datetime.now()
+            tutorial.save()
+
+            messages.success(request, 'New series created! ')
+            return redirect(request.GET.get('prev'))
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = NewTutorialForm()
+        form.fields['tutorial_slug'].widget = forms.HiddenInput()
+        form.fields['tutorial_series'].widget = forms.HiddenInput()
+        form.fields['tutorial_published'].widget = forms.HiddenInput()
     return render(request, "main/new_series.html", {"form": form})
 
 
