@@ -20,7 +20,7 @@ class NewUserForm(UserCreationForm):
 class NewCategoryForm(forms.ModelForm):
     tutorial_category = forms.CharField(label='Category Name', required=True)
     category_summary = forms.CharField(label='Category Summary', required=True)
-    category_slug = forms.CharField(label="Category Reference", required = True)
+    category_slug = forms.CharField(label="Category Reference", required = False)
 
     class Meta:
         model = TutorialCategory

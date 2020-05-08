@@ -1,3 +1,4 @@
+from django import forms
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Tutorial, TutorialSeries, TutorialCategory
@@ -92,6 +93,7 @@ def new_category(request):
         if form.is_valid():
             category = form.save(commit=False)
             category.user = request.user
+            category.category_slug = form.cleaned_data['tutorial_category']
             category.save()
 
             messages.success(request, 'New category created!')
@@ -100,6 +102,7 @@ def new_category(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = NewCategoryForm()
+        form.fields['category_slug'].widget = forms.HiddenInput()
     return render(request, "main/new_category.html", {"form": form})
 
 def new_series(request):
